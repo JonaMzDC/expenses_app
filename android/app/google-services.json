@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "549903214551",
+    "firebase_url": "https://expensesapp-edf6e.firebaseio.com",
+    "project_id": "expensesapp-edf6e",
+    "storage_bucket": "expensesapp-edf6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549903214551:android:6108609705b0bebb9bcd92",
+        "android_client_info": {
+          "package_name": "base.corazaogames.com.expenses_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549903214551-clq1ubtqn4u14kgnlmi0l90fp9bd5jv5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-1RFB9bMDfZu5tF-hniY1I4qE1KsOR9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "549903214551-clq1ubtqn4u14kgnlmi0l90fp9bd5jv5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
