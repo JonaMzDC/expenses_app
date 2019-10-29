@@ -1,10 +1,14 @@
+import 'dart:ffi';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart';
 
 
 class GraphWidget extends StatefulWidget{
+  final List<double> perDay;
 
+  const GraphWidget({Key key , this.perDay}) :
+        super(key : key);
 
 
   @override
@@ -21,7 +25,7 @@ class _GraphWidgetState  extends State<GraphWidget>{
     super.initState();
 
     var r = Random();
-    data = List<double>.generate(30, (i)=> r.nextDouble()*1500);
+    data = widget.perDay;
   }
 
 
@@ -75,7 +79,7 @@ class _GraphWidgetState  extends State<GraphWidget>{
           TickSpec(14,label: '15'),
           TickSpec(19,label: '20'),
           TickSpec(24,label: '25'),
-          TickSpec(29,label: '30')
+          TickSpec(29,label: '31')
           ]
         )
       ),

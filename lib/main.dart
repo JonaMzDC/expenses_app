@@ -1,6 +1,8 @@
 import 'package:expenses_app/graph_widget.dart';
+import 'package:expenses_app/month_widget.dart';
 import 'package:flutter/material.dart';
 import  'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,12 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Expenses Tracker',
       theme: ThemeData(
 
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Expenses tracker'),
     );
   }
 }
@@ -34,10 +36,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   PageController _pageController;
   int currentPage=9;
+  Stream<QuerySnapshot> _query;
+
 
   @override
   void initState(){
     super.initState();
+
+    _query= Firestore.instance
+        .collection('expenses')
+        .where("Month", isEqualTo: currentPage+1)
+        .snapshots();
+
     _pageController = PageController(
       initialPage:9,
       viewportFraction: 0.4,
@@ -93,13 +103,22 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         children: <Widget>[
           _selector(),
-          _expenses(),
-          _graph(),
-          Container(
-            color: Colors.blueAccent.withOpacity(0.15),
-            height: 24.0,
+          StreamBuilder<QuerySnapshot>(
+            stream: _query,
+            builder: (BuildContext context ,AsyncSnapshot<QuerySnapshot>  data){
+              if(data.hasData){
+                return MonthWidget(
+                  documents: data.data.documents,
+                );
+              }else{
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+            },
           ),
-          _list(),
+
 
 
         ],
@@ -165,91 +184,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _graph(){
-    return Container(
-        height: 180.0,
-        child: GraphWidget());
-  }
-
-  Widget _addItem(IconData icon, String title, String percent, String price){
-    return Column(
-      children: <Widget>[
-        ListTile(
-          leading: Icon(icon),
-          title: Text(title, style:
-            TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold
-            ),
-          ),
-          subtitle:  Text("$percent of expenses", style:
-            TextStyle(
-              color: Colors.blueGrey,
-              fontSize: 16.0
-            )
-          ),
-          trailing: Container(
-            decoration: BoxDecoration(
-              color: Colors.blueAccent.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(5.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("\$$price",style: TextStyle(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.w500,
-                fontSize: 16.0,
-
-              ),),
-            ),
-          ),
-        ),
-        Container(
-          color: Colors.blueAccent.withOpacity(0.15),
-          height: 4.0,
-        ),
-      ],
-
-    );
-  }
-
-  Widget _list(){
-    return Expanded(
-      child: ListView(
-        children: <Widget>[
-
-          _addItem(FontAwesomeIcons.shoppingCart,"Shopping", "14%", "145.12"),
-          _addItem(FontAwesomeIcons.glassMartini,"Alcohol", "5%", "73.24"),
-          _addItem(Icons.fastfood,"Fast food", "10%", "101.58"),
-          _addItem(Icons.account_balance_wallet,"Bills", "55%", "958.78"),
-          _addItem(FontAwesomeIcons.tshirt,"Clothes", "35%", "350.55"),
-          _addItem(FontAwesomeIcons.heart,"Relashionship", "12%", "73.24"),
-          _addItem(FontAwesomeIcons.clinicMedical,"Health care", "14%", "80.14"),
-        ],
-      ),
-    );
-  }
 
 
-  Widget _expenses(){
-    return Column(
-      children: <Widget>[
-        Text("\$2361.41" , style:
-          TextStyle(
-            fontSize:30.0,
-            fontWeight: FontWeight.bold
-          ),
-        ),
-        Text("Total expenses" , style:
-          TextStyle(
-             fontWeight: FontWeight.bold,
-            fontSize: 16.0,
-            color:  Colors.blueGrey
-          ),
-        )
 
 
-      ],
-    );
-  }
+
+
+
+
 }
